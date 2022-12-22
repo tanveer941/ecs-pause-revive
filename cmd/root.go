@@ -35,17 +35,19 @@ var rootCmd = &cobra.Command{
 			return err
 		}
 		log.Printf("Action choice: ", actionChoice)
-		clusterChoice, err := actions.ChooseCluster()
+		ecsActionInst := &actions.EcsAction{}
+		ecsClient, _ := ecsActionInst.NewECSClient()
+		clusterChoice, err := ecsClient.ChooseCluster()
 		if err != nil {
 			return err
 		}
 		log.Printf("Cluster choice: ", clusterChoice)
-		serviceChoice, err := actions.ChooseService(clusterChoice)
+		serviceChoice, err := ecsClient.ChooseService(clusterChoice)
 		if err != nil {
 			return err
 		}
 		log.Printf("Service choice: ", serviceChoice)
-		actions.PerformAction(actionChoice, serviceChoice, clusterChoice)
+		ecsClient.PerformAction(actionChoice, serviceChoice, clusterChoice)
 
 		return nil
 	},
